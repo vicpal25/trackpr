@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -12,6 +12,12 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
+import { reduxForm, Field } from 'redux-form';
+
+
+import {connect} from 'react-redux';
+import {compose} from 'redux';
+import * as actions from '../../actions';
 
 const styles = theme => ({
   main: {
@@ -45,10 +51,41 @@ const styles = theme => ({
   },
 });
 
-function SignIn(props) {
-  const { classes } = props;
+class SignIn extends Component {
 
-  return (
+  handleEmailChange = (evt) => {
+    this.setState({ email: evt.target.value });
+  }
+  
+  handlePasswordChange = (evt) => {
+    this.setState({ password: evt.target.value });
+  }
+  
+  canBeSubmitted() {
+    const errors = this.validate(this.state.email, this.state.password);
+    const isDisabled = Object.keys(errors).some(x => errors[x]);
+    return !isDisabled;
+  }
+  
+  validate(email, password) {
+    // true means invalid, so our conditions got reversed
+    return {
+      email: email.length === 0,
+      password: password.length === 0,
+    };
+  }  
+  
+  onSubmit = formProps => {
+    this.props.signin(formProps, (response)=> {
+      this.props.history.push('/activities');  
+    });
+  };
+
+  signUpForm(classes){
+
+    const { handleSubmit } = this.props;
+
+    return(
     <main className={classes.main}>
       <CssBaseline />
       <Paper className={classes.paper}>
@@ -58,14 +95,14 @@ function SignIn(props) {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form}>
+        <form className={classes.form} onSubmit={handleSubmit(this.onSubmit)}>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="email">Email Address</InputLabel>
-            <Input id="email" name="email" autoComplete="email" autoFocus />
+            <Field name="email" type="text" component="input" autoComplete="none" />
           </FormControl>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="password">Password</InputLabel>
-            <Input name="password" type="password" id="password" autoComplete="current-password" />
+            <Field name="password" type="password" component="input" autoComplete="none" />
           </FormControl>
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
@@ -80,14 +117,36 @@ function SignIn(props) {
           >
             Sign in
           </Button>
+          <div>{this.props.errorMessage}</div>
         </form>
       </Paper>
-    </main>
-  );
+  </main>);
+
+  }
+  render() {
+    const { classes } = this.props;
+  
+    return(
+      <span>
+       {this.signUpForm(classes)}
+     </span>
+    )
+
+  }
+
 }
+
 
 SignIn.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(SignIn);
+function mapStateToProps(state) {
+  return {errorMessage: state.auth.errorMessage }  
+}
+
+export default compose(
+  connect(mapStateToProps, actions),
+  withStyles(styles, { withTheme: true }),
+  reduxForm({'form': 'signin'})
+)(SignIn);

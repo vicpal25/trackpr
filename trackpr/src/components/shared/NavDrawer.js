@@ -12,13 +12,15 @@ import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import Button from '@material-ui/core/Button';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import {compose} from 'redux';
 
 import MainContent from './MainContent';
 
@@ -101,6 +103,8 @@ const styles = theme => ({
 
 class NavDrawer extends Component {
 
+  
+
 state = {
     open: false,
     };
@@ -113,37 +117,41 @@ state = {
     this.setState({ open: false });
     };
 
-  render() {
+    renderNavigation(classes) {
+      if (!this.props.authenticated) {
+        return (
+          <Button color="inherit" className={classes.login}> <Link to="/signin">Login</Link></Button>
+          );
+      } else {
+        return (
+          <Toolbar disableGutters={!this.state.open}>            
 
-    const { classes, theme } = this.props;
-    
-    return (
-        <div className={classes.root}>
-        <CssBaseline />
-        <AppBar
-          position="fixed"
-          className={classNames(classes.appBar, {
-            [classes.appBarShift]: this.state.open,
-          })}
-        >
-          <Toolbar disableGutters={!this.state.open}>
-            <IconButton
-              color="inherit"
-              aria-label="Open drawer"
-              onClick={this.handleDrawerOpen}
-              className={classNames(classes.menuButton, {
-                [classes.hide]: this.state.open,
-              })}
-            >
-              <MenuIcon className={classNames(classes.icon, 'fas fa-align-center')}  />
-            </IconButton>
+          <IconButton
+            color="inherit"
+            aria-label="Open drawer"
+            onClick={this.handleDrawerOpen}
+            className={classNames(classes.menuButton, {
+              [classes.hide]: this.state.open,
+            })}
+          >
+            <MenuIcon className={classNames(classes.icon, 'fas fa-align-center')}  />
+          </IconButton>
+
             <Typography variant="h6" color="inherit" noWrap>
               Mini variant drawer
             </Typography>
-            <Button color="inherit" className={classes.login}>Login</Button>
+  
+            <Button color="inherit" className={classes.login}> <Link to="/signout">Log Out</Link></Button>            
           </Toolbar>
-        </AppBar>
-        <Drawer
+          );
+
+      }
+    }   
+    
+    renderDrawer(classes) {
+ 
+        return (         
+          <Drawer
           variant="permanent"
           className={classNames(classes.drawer, {
             [classes.drawerOpen]: this.state.open,
@@ -156,37 +164,64 @@ state = {
             }),
           }}
           open={this.state.open}
-        >
-          <div className={classes.toolbar}>
-            <IconButton onClick={this.handleDrawerClose}>
-              {this.state.open ?  <ChevronLeftIcon /> : <div className="spacer"></div> }
-            </IconButton>
-          </div>
+          >
+              <div className={classes.toolbar}>
+                <IconButton onClick={this.handleDrawerClose}>
+                  {this.state.open ?  <ChevronLeftIcon /> : <div className="spacer"></div> }
+                </IconButton>
+              </div>
 
-          <List>
-            {['All mail', 'Trash', 'Spam'].map((text, index) => (
-              <ListItem  button key={text}>
-                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                <ListItemText className={classes.navigation} primary={text} />
-              </ListItem>
-            ))}
-          </List>
-        </Drawer>
+              <List>
+                {['All mail', 'Trash', 'Spam'].map((text, index) => (
+                  <ListItem  button key={text}>
+                    <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                    <ListItemText className={classes.navigation} primary={text} />
+                  </ListItem>
+                ))}
+              </List>
+          </Drawer>
+        )
+      
+    }
 
-        <MainContent>
-          {this.props.children}
-        </MainContent>
-  
+  render() {
+
+    const { classes, theme } = this.props;
+    
+    return (
+        <div className={classes.root}>
+            <CssBaseline />
+            <AppBar
+              position="fixed"
+              className={classNames(classes.appBar, {
+                [classes.appBarShift]: this.state.open,
+              })}
+            >
+              {this.renderNavigation(classes)}
+            </AppBar>
+            {this.renderDrawer(classes)} 
+            <MainContent>
+              {this.props.children}
+            </MainContent>  
         </div>
     )
   }
 }
 
-
 NavDrawer.propTypes = {
-    classes: PropTypes.object.isRequired,
-    theme: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired,
+  theme: PropTypes.object.isRequired,
+};
+
+function mapStateToProps(state) {
+  return {
+    authenticated: state.auth.authenticated
   };
-  
-  export default withStyles(styles, { withTheme: true })(NavDrawer);
-  
+}
+ 
+export default compose(
+  connect(mapStateToProps),
+  withStyles(styles, {
+    withTheme: true
+  })
+)(NavDrawer);
