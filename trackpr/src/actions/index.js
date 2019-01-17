@@ -2,12 +2,12 @@ import axios from 'axios';
 import {
   CHANGE_AUTH,
   AUTH_USER,
-  AUTH_ERROR
+  AUTH_ERROR,
+  FETCH_ACTIVITIES
 } from './types';
 
 
 const DEV_API = 'http://localhost:3090';
-
 
 export function changeAuth(isLoggedIn) {
   return {
@@ -40,7 +40,6 @@ export const signup = (formProps, callback) => async dispatch => {
   }
 
 };
-
 export const signin = (formProps, callback) => async dispatch => {
 
   try {
@@ -75,6 +74,18 @@ export const signout = (callback) => {
   return {
     type: AUTH_USER,
     payload: ''
+  }
+
+}
+
+
+export function fetchActivities(strava_id) {
+
+  const response = axios.get(DEV_API + '/activities/' + strava_id);
+
+  return {
+    type: FETCH_ACTIVITIES,
+    payload: response
   }
 
 }

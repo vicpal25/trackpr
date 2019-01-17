@@ -5,28 +5,24 @@ import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {compose} from 'redux';
 
+import DrawerNavigationItems from './DrawerNavigationItems';
+import AthleteAvatar from './nav/Avatar';
 import MainContent from './MainContent';
-
 
 const drawerWidth = 240;
 
+const navigation = ['Activities', 'Events', 'Blog'];
 const styles = theme => ({
   navigation: {
     fontSize: '14px !important'
@@ -49,8 +45,8 @@ const styles = theme => ({
     transition: 'transform 300ms ease 0s, opacity 300ms ease 0s',
     fontWeight: '300',
     lineHeight: '30px',
-    backgroundColor:'transparent',
-    color:'#000',
+    backgroundColor:'#333',
+    color:'#fff',
     boxShadow: 'none',
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
@@ -138,11 +134,13 @@ state = {
           </IconButton>
 
             <Typography variant="h6" color="inherit" noWrap>
-              Mini variant drawer
+              Track My PR!
             </Typography>
-  
+
             <Button color="inherit" className={classes.login}> <Link to="/signout">Log Out</Link></Button>            
-          </Toolbar>
+            <AthleteAvatar/>
+
+            </Toolbar>
           );
 
       }
@@ -170,16 +168,8 @@ state = {
                   {this.state.open ?  <ChevronLeftIcon /> : <div className="spacer"></div> }
                 </IconButton>
               </div>
-
-              <List>
-                {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                  <ListItem  button key={text}>
-                    <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                    <ListItemText className={classes.navigation} primary={text} />
-                  </ListItem>
-                ))}
-              </List>
-          </Drawer>
+                <DrawerNavigationItems classes={classes}  />
+              </Drawer>
         )
       
     }

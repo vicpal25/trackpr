@@ -6,7 +6,7 @@ class SignOut extends Component {
 
     componentDidMount() {
         this.props.signout(()=> {
-            this.props.history.push('/signin');  
+            this.props.history.push('/');  
         });
     }
 

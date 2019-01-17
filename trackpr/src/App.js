@@ -12,6 +12,8 @@ import requireAuth from './components/shared/RequireAuth';
 
 //Private Components
 import Activities from './components/private/Activities';
+import Blog from './components/private/Blog';
+import Events from './components/private/Events';
 
 import { createStore, applyMiddleware } from 'redux';
 
@@ -40,20 +42,18 @@ class App extends Component {
 }
   render() {
 
-
-    console.table(this.props);
-
     if(this.props.authenticated) {
       return (
         <MuiThemeProvider theme={theme}>     
-          <BrowserRouter>
             <div className="App">
                 <NavDrawer>
                 <Route path="/activities" component={Activities} />
                 <Route path="/signout" component={SignOut} />
+                <Route path="/events" component={Events} />
+                <Route path="/blog" component={Blog} />
+
                 </NavDrawer>        
             </div>
-          </BrowserRouter>
         </MuiThemeProvider>
     );
     } else {
