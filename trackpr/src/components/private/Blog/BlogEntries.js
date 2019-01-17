@@ -7,7 +7,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
-
+import Divider from '@material-ui/core/Divider';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
@@ -18,6 +18,9 @@ const styles = theme => ({
     maxWidth: '100%',
     marginBottom: '30px',
     backgroundColor: theme.palette.background.paper,
+  },
+  item: {
+    padding:'20px 0'
   },
   inline: {
     display: 'inline',
@@ -41,7 +44,8 @@ class BlogEntries extends Component {
         <CardContent>
 
           <List className={classes.root}>
-            <ListItem alignItems="flex-start">
+          <Divider/>
+            <ListItem alignItems="flex-start" className={classes.item}>
               <ListItemAvatar>
                 <Avatar alt="Remy Sharp" />
               </ListItemAvatar>
@@ -57,7 +61,8 @@ class BlogEntries extends Component {
                 }
               />
             </ListItem>
-            <ListItem alignItems="flex-start">
+            <Divider/>
+            <ListItem alignItems="flex-start" className={classes.item}>
             <ListItemAvatar>
               <Avatar alt="Remy Sharp" />
             </ListItemAvatar>
@@ -73,7 +78,8 @@ class BlogEntries extends Component {
               }
             />
           </ListItem>
-          <ListItem alignItems="flex-start">
+          <Divider/>
+          <ListItem alignItems="flex-start" className={classes.item}>
           <ListItemAvatar>
             <Avatar alt="Remy Sharp" />
           </ListItemAvatar>

@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import { connect } from 'react-redux';
@@ -18,7 +19,7 @@ import Events from './components/private/Events';
 import { createStore, applyMiddleware } from 'redux';
 
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-
+import 'draft-js/dist/Draft.css';
 
 const theme = createMuiTheme({
   typography: {

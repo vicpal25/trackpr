@@ -15,7 +15,6 @@ const styles = theme => ({
       content: {
         flexGrow: 1,
         padding: theme.spacing.unit * 3,
-
       },
   });
 
@@ -28,9 +27,7 @@ class MainContent extends Component {
           <div className={classes.toolbar} />
 
           <Typography paragraph>
-
            {this.props.children}
-
           </Typography>
 
         </main>
